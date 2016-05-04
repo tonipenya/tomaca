@@ -1,0 +1,24 @@
+{
+  "name": "tomaca",
+  "productName": "Tomaca",
+  "version": "1.0.0",
+  "main": "main.js",
+  "license": "ISC",
+  "author": "Toni Penya-Alba",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-packager ./ --platform=darwin --arch=x64 --out=out --icon=./icon.icns --overwrite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tonipenya/tomaca.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tonipenya/tomaca/issues"
+  },
+  "homepage": "https://github.com/tonipenya/tomaca#readme",
+  "devDependencies": {
+    "electron-packager": "^12.0.2",
+    "electron-prebuilt": "^1.2.7"
+  }
+}
