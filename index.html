@@ -16,21 +16,35 @@
           <span id="play" class="control icon icon-play hidden"></span>
           <span id="stop" class="control icon icon-stop hidden"></span>
         </div>
+        <div id="preferences" class="hidden">
+          <div class="form-group">
+            <label>Time</label>
+            <input id="duration-input" type="number" class="form-control" placeholder="seconds">
+          </div>
+        </div>
       </div>
 
       <footer class="toolbar toolbar-footer">
-        <div class="toolbar-actions pull-right">
+        <div id="app-actions" class="toolbar-actions pull-right">
           <div class="btn-group">
-            <button class="btn btn-default js-refresh-action">
-              <span class="icon icon-arrows-ccw js-refresh-action" title="Refresh"></span>
+            <button id="preferences-btn" class="btn btn-default">
+              <span class="icon icon-cog" title="Preferences"></span>
             </button>
 
-            <button id="quit" class="btn btn-default js-quit-action">
+            <button id="quit-btn" class="btn btn-default js-quit-action">
               <span class="icon icon-cancel js-quit-action" title="Quit"></span>
             </button>
           </div>
         </div>
+        <div id="preferences-actions" class="toolbar-actions hidden">
+          <button id="preferences-cancel" class="btn btn-default">
+            Cancel
+          </button>
 
+          <button id="preferences-save" class="btn btn-primary pull-right">
+            Save
+          </button>
+        </div>
       </footer>
     </div>
   </body>
