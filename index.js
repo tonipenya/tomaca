@@ -14,6 +14,7 @@ function init() {
   stopButton = document.getElementById('stop')
   playButton.addEventListener('click', startTimer)
   stopButton.addEventListener('click', stopTimer)
+  document.getElementById('quit').addEventListener('click', window.close)
 
   stopTimer()
 }
