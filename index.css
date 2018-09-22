@@ -6,6 +6,27 @@
   --font-size: 14px;
 }
 
+#content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+#countdown {
+  font-size: 30vw;
+}
+
+.control {
+  font-size: 15vw;
+}
+
+.hidden {
+  display: none;
+}
+
 /* The arrow at the top of the window */
 .header-arrow {
   position: absolute;
