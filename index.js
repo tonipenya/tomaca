@@ -1,15 +1,15 @@
 const {ipcRenderer, shell} = require('electron')
+// TODO: remove reference to shell if unnecessary
 
 document.addEventListener('DOMContentLoaded', init)
 
 let playButton
 let pauseButton
-let preferencesPane
 let appActions
-let preferencesActions
 let progressRing
 let timeLeft
 var timerIntervalId
+let prefs
 let UPDATE_INTERVAL = 1000
 var RADIUS = 122;
 var CIRCUMFERENCE = 2 * Math.PI * RADIUS;
@@ -26,10 +26,10 @@ let breakTimer = {
 let timers = [pomodoroTimer, breakTimer]
 
 function init() {
+  prefs = new Preferences()
   initCurrentTimer()
   initAppConttrols()
   initStartStopControls()
-  initPreferencesControls()
   initProgressRing()
   updateLabels()
 }
@@ -115,37 +115,6 @@ function resetProgressRing() {
   progressRing.style.strokeDashoffset = 0
 }
 
-function initPreferencesControls() {
-  preferencesPane = document.getElementById('preferences')
-  preferencesActions = document.getElementById('preferences-actions')
-  document
-    .getElementById('preferences-btn')
-    .addEventListener('click', togglePreferences)
-  document
-    .getElementById('preferences-cancel')
-    .addEventListener('click', togglePreferences)
-  document
-    .getElementById('preferences-save')
-    .addEventListener('click', savePreferences)
-}
-
-function togglePreferences() {
-  document.getElementById('pomodoro-duration').value = millisInMinutes(pomodoroTimer.duration)
-  document.getElementById('break-duration').value = millisInMinutes(breakTimer.duration)
-  preferencesPane.classList.toggle('hidden')
-  preferencesActions.classList.toggle('hidden')
-  appActions.classList.toggle('hidden')
-}
-
-function savePreferences() {
-  pomodoroTimer.duration = minutesInMillis(
-    Number(document.getElementById('pomodoro-duration').value))
-  breakTimer.duration = minutesInMillis(
-    Number(document.getElementById('break-duration').value))
-  togglePreferences()
-  stopTimer()
-}
-
 function millisInMinutes(millis) {
   return millis / 1000 / 60
 }
@@ -164,4 +133,55 @@ function humanReadableTime(millis) {
 
 function padLeft(string, pad, length) {
   return (new Array(length+1).join(pad) + string).slice(-length);
+}
+
+class Preferences {
+  // TODO: reduce coupling with outside world (appActions, pomodoroTimer, breakTimer)
+  // TODO: extract to a different file 
+  constructor() {
+    this.paneElem = document.getElementById('preferences')
+    this.actions = document.getElementById('preferences-actions')
+    this.pomodoroDurationElem = document.getElementById('pomodoro-duration')
+    this.breakDurationElem = document.getElementById('break-duration')
+    document
+      .getElementById('preferences-btn')
+      .addEventListener('click', () => this.toggle())
+    document
+      .getElementById('preferences-cancel')
+      .addEventListener('click', () => this.toggle())
+    document
+      .getElementById('preferences-save')
+      .addEventListener('click', () => this.save())
+  }
+
+  get pomodoroDuration() {
+    return minutesInMillis(Number(this.pomodoroDurationElem.value))
+  }
+
+  set pomodoroDuration(duration) {
+    this.pomodoroDurationElem.value = millisInMinutes(duration)
+  }
+
+  get breakDuration() {
+    return minutesInMillis(Number(this.breakDurationElem.value))
+  }
+
+  set breakDuration(duration) {
+    this.breakDurationElem.value = millisInMinutes(duration)
+  }
+
+  toggle() {
+    this.pomodoroDuration = pomodoroTimer.duration
+    this.breakDuration = breakTimer.duration
+    this.paneElem.classList.toggle('hidden')
+    this.actions.classList.toggle('hidden')
+    appActions.classList.toggle('hidden')
+  }
+
+  save() {
+    pomodoroTimer.duration = this.pomodoroDuration
+    breakTimer.duration = this.breakDuration
+    this.toggle()
+    stopTimer()
+  }
 }
