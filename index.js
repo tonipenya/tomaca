@@ -11,8 +11,8 @@ let progressRing
 let UPDATE_INTERVAL = 1000
 var RADIUS = 122;
 var CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-let timerDuration = 10000
-let timeLeft = timerDuration
+let pomodoroDuration = 10000
+let timeLeft = pomodoroDuration
 var timerIntervalId
 
 function init() {
@@ -63,7 +63,7 @@ function finishTimer() {
 }
 
 function stopTimer() {
-  timeLeft = timerDuration
+  timeLeft = pomodoroDuration
   playButton.classList.remove('hidden')
   stopButton.classList.add('hidden')
   clearInterval(timerIntervalId)
@@ -82,3 +82,51 @@ function initProgressRing() {
   progressRing.style.strokeDasharray = CIRCUMFERENCE;
 }
 
+function startProgressRing() {
+  progressRing.style.transitionDuration = pomodoroDuration + 'ms';
+  progressRing.style.strokeDashoffset = CIRCUMFERENCE
+}
+
+function resetProgressRing() {
+  progressRing.style.transitionDuration = '1s';
+  progressRing.style.strokeDashoffset = 0
+}
+
+function initPreferencesControls() {
+  preferencesPane = document.getElementById('preferences')
+  preferencesActions = document.getElementById('preferences-actions')
+  document
+    .getElementById('preferences-btn')
+    .addEventListener('click', togglePreferences)
+  document
+    .getElementById('preferences-cancel')
+    .addEventListener('click', togglePreferences)
+  document
+    .getElementById('preferences-save')
+    .addEventListener('click', savePreferences)
+}
+
+function togglePreferences() {
+  document.getElementById('pomodoro-duration').value = pomodoroDuration / 1000
+  preferencesPane.classList.toggle('hidden')
+  preferencesActions.classList.toggle('hidden')
+  appActions.classList.toggle('hidden')
+}
+
+function savePreferences() {
+  pomodoroDuration = Number(document.getElementById('pomodoro-duration').value) * 1000
+  togglePreferences()
+  stopTimer()
+}
+
+function humanReadableTime(millis) {
+  const seconds = millis / 1000
+  const wholeMinutes = Math.trunc(seconds / 60)
+  const remainderSeconds = seconds - wholeMinutes * 60
+
+  return `${padLeft(wholeMinutes, '0', 2)}:${padLeft(remainderSeconds, '0', 2)}`
+}
+
+function padLeft(string, pad, length) {
+  return (new Array(length+1).join(pad) + string).slice(-length);
+}
