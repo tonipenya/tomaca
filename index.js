@@ -15,12 +15,12 @@ var RADIUS = 122;
 var CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 let pomodoroTimer = {
   label: 'Pomodoro',
-  duration: 25 * 60 * 1000,
+  duration: minutesInMillis(25),
   color: '#ff9b9b'
 }
 let breakTimer = {
   label: 'Break',
-  duration: 5 * 60 * 1000,
+  duration: minutesInMillis(5),
   color: '#b8e0b8'
 }
 let timers = [pomodoroTimer, breakTimer]
@@ -130,18 +130,28 @@ function initPreferencesControls() {
 }
 
 function togglePreferences() {
-  document.getElementById('pomodoro-duration').value = pomodoroTimer.duration / 1000
-  document.getElementById('break-duration').value = breakTimer.duration / 1000
+  document.getElementById('pomodoro-duration').value = millisInMinutes(pomodoroTimer.duration)
+  document.getElementById('break-duration').value = millisInMinutes(breakTimer.duration)
   preferencesPane.classList.toggle('hidden')
   preferencesActions.classList.toggle('hidden')
   appActions.classList.toggle('hidden')
 }
 
 function savePreferences() {
-  pomodoroTimer.duration = Number(document.getElementById('pomodoro-duration').value) * 1000
-  breakTimer.duration = Number(document.getElementById('break-duration').value) * 1000
+  pomodoroTimer.duration = minutesInMillis(
+    Number(document.getElementById('pomodoro-duration').value))
+  breakTimer.duration = minutesInMillis(
+    Number(document.getElementById('break-duration').value))
   togglePreferences()
   stopTimer()
+}
+
+function millisInMinutes(millis) {
+  return millis / 1000 / 60
+}
+
+function minutesInMillis(minutes) {
+  return minutes * 60 * 1000
 }
 
 function humanReadableTime(millis) {
