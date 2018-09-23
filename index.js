@@ -1,5 +1,4 @@
-const {ipcRenderer, shell} = require('electron')
-// TODO: remove reference to shell if unnecessary
+const {ipcRenderer} = require('electron')
 
 document.addEventListener('DOMContentLoaded', init)
 
@@ -137,7 +136,7 @@ function padLeft(string, pad, length) {
 
 class Preferences {
   // TODO: reduce coupling with outside world (appActions, pomodoroTimer, breakTimer)
-  // TODO: extract to a different file 
+  // TODO: extract to a different file
   constructor() {
     this.paneElem = document.getElementById('preferences')
     this.actions = document.getElementById('preferences-actions')
