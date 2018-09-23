@@ -78,7 +78,7 @@ function updateLabels() {
 }
 
 function initProgressRing() {
-  progressRing = document.querySelector('.progress-value');
+  progressRing = document.getElementById('progress-value');
   progressRing.style.strokeDasharray = CIRCUMFERENCE;
 }
 

@@ -56,26 +56,24 @@
   }
 }
 
-.progress {
+#progress {
   transform: rotate(-90deg);
 }
 
-.progress-meter,
-.progress-value {
+#progress-meter,
+#progress-value {
   fill: none;
 }
 
-.progress-meter {
+#progress-meter {
   stroke: #e6e6e6;
 }
 
-.progress-value {
-  stroke: #ff9b9b;
+#progress-value {
   stroke-linecap: round;
   transition-property: stroke-dashoffset;
   transition-timing-function: linear;
 }
-
 
 /* The arrow at the top of the window */
 .header-arrow {
