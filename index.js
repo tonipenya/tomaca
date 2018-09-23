@@ -72,9 +72,9 @@ function stopTimer() {
 }
 
 function updateLabels() {
-  const secondsLeft = Math.round(timeLeft / 1000)
-  ipcRenderer.send('timer-updated', secondsLeft)
-  document.getElementById('countdown-number').innerHTML = secondsLeft
+  const labelText = humanReadableTime(timeLeft)
+  ipcRenderer.send('timer-updated', labelText)
+  document.getElementById('countdown-number').innerHTML = labelText
 }
 
 function initProgressRing() {
