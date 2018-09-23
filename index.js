@@ -47,9 +47,19 @@ function startTimer() {
     updateLabels()
 
     if (timeLeft <= 0) {
-      clearInterval(timerIntervalId)
+      finishTimer()
     }
   }, UPDATE_INTERVAL)
+}
+
+function finishTimer() {
+  clearInterval(timerIntervalId)
+  const notification = new Notification('Time\'s up', {
+    body: `Your timer has finished.`
+  })
+  notification.onclick = () => {
+    ipcRenderer.send('show-window')
+  }
 }
 
 function stopTimer() {
