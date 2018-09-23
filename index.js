@@ -8,19 +8,36 @@ let preferencesPane
 let appActions
 let preferencesActions
 let progressRing
+let timeLeft
+var timerIntervalId
 let UPDATE_INTERVAL = 1000
 var RADIUS = 122;
 var CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-let pomodoroDuration = 10000
-let timeLeft = pomodoroDuration
-var timerIntervalId
+let pomodoroTimer = {
+  label: 'Pomodoro',
+  duration: 25 * 60 * 1000,
+  color: '#ff9b9b'
+}
+let breakTimer = {
+  label: 'Break',
+  duration: 5 * 60 * 1000,
+  color: '#b8e0b8'
+}
+let timers = [pomodoroTimer, breakTimer]
 
 function init() {
+  initCurrentTimer()
   initAppConttrols()
   initStartStopControls()
   initPreferencesControls()
   initProgressRing()
   updateLabels()
+}
+
+function initCurrentTimer() {
+  timeLeft = timers[0].duration
+  document.getElementById('progress-value').style.stroke = timers[0].color
+  document.getElementById('task-label').textContent = timers[0].label
 }
 
 function initAppConttrols(){
@@ -47,13 +64,13 @@ function startTimer() {
     updateLabels()
 
     if (timeLeft <= 0) {
-      finishTimer()
+      stopTimer()
+      notifyTimerFinished()
     }
   }, UPDATE_INTERVAL)
 }
 
-function finishTimer() {
-  clearInterval(timerIntervalId)
+function notifyTimerFinished() {
   const notification = new Notification('Time\'s up', {
     body: `Your timer has finished.`
   })
@@ -62,8 +79,14 @@ function finishTimer() {
   }
 }
 
+function rotateTimers() {
+  const head = timers.shift()
+  timers.push(head)
+}
+
 function stopTimer() {
-  timeLeft = pomodoroDuration
+  rotateTimers()
+  initCurrentTimer()
   playButton.classList.remove('hidden')
   stopButton.classList.add('hidden')
   clearInterval(timerIntervalId)
@@ -74,7 +97,7 @@ function stopTimer() {
 function updateLabels() {
   const labelText = humanReadableTime(timeLeft)
   ipcRenderer.send('timer-updated', labelText)
-  document.getElementById('countdown-number').innerHTML = labelText
+  document.getElementById('countdown-number').textContent = labelText
 }
 
 function initProgressRing() {
@@ -83,12 +106,12 @@ function initProgressRing() {
 }
 
 function startProgressRing() {
-  progressRing.style.transitionDuration = pomodoroDuration + 'ms';
+  progressRing.style.transitionDuration = timers[0].duration + 'ms';
   progressRing.style.strokeDashoffset = CIRCUMFERENCE
 }
 
 function resetProgressRing() {
-  progressRing.style.transitionDuration = '1s';
+  progressRing.style.transitionDuration = '500ms';
   progressRing.style.strokeDashoffset = 0
 }
 
@@ -107,14 +130,16 @@ function initPreferencesControls() {
 }
 
 function togglePreferences() {
-  document.getElementById('pomodoro-duration').value = pomodoroDuration / 1000
+  document.getElementById('pomodoro-duration').value = pomodoroTimer.duration / 1000
+  document.getElementById('break-duration').value = breakTimer.duration / 1000
   preferencesPane.classList.toggle('hidden')
   preferencesActions.classList.toggle('hidden')
   appActions.classList.toggle('hidden')
 }
 
 function savePreferences() {
-  pomodoroDuration = Number(document.getElementById('pomodoro-duration').value) * 1000
+  pomodoroTimer.duration = Number(document.getElementById('pomodoro-duration').value) * 1000
+  breakTimer.duration = Number(document.getElementById('break-duration').value) * 1000
   togglePreferences()
   stopTimer()
 }
