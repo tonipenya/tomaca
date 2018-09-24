@@ -95,7 +95,8 @@ function stopTimer() {
 
 function updateLabels() {
   const labelText = humanReadableTime(timeLeft)
-  ipcRenderer.send('timer-updated', labelText)
+  const trayLabel = (timeLeft == timers[0].duration)? '' : labelText
+  ipcRenderer.send('timer-updated', trayLabel)
   document.getElementById('countdown-number').textContent = labelText
 }
 
