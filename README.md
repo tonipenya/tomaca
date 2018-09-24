@@ -7,6 +7,9 @@ Built with [photon](http://photonkit.com).
 
 ## Running
 
+There is a binary with the latest release [here](https://github.com/tonipenya/tomaca/releases/download/1.0/Tomaca.zip). 
+Otherwise, to run from source:
+
 ```sh
 git clone https://github.com/tonipenya/tomaca
 cd tomaca
