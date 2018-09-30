@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain, Tray} = require('electron')
+const {app, BrowserWindow, ipcMain, Tray, Menu} = require('electron')
 const path = require('path')
 
 const assetsDirectory = path.join(__dirname, 'assets')
@@ -29,6 +29,15 @@ app.on('window-all-closed', () => {
 
 const createTray = () => {
   tray = new Tray(path.join(assetsDirectory, 'trayIcon.png'))
+
+  const contextMenu = Menu.buildFromTemplate([
+      {label: 'Quit Tomaca', type: 'normal', role: 'quit'}
+    ])
+
+  tray.on('right-click', () => {
+    window.hide()
+    tray.popUpContextMenu(contextMenu)
+  })
   tray.on('click', toggleWindow)
 }
 

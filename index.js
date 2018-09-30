@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', init)
 
 let playButton
 let pauseButton
-let appActions
 let progressRing
 let timeLeft
 var timerIntervalId
@@ -27,7 +26,6 @@ let timers = [pomodoroTimer, breakTimer]
 function init() {
   prefs = new Preferences()
   initCurrentTimer()
-  initAppConttrols()
   initStartStopControls()
   initProgressRing()
   updateLabels()
@@ -37,11 +35,6 @@ function initCurrentTimer() {
   timeLeft = timers[0].duration
   document.getElementById('progress-value').style.stroke = timers[0].color
   document.getElementById('task-label').textContent = timers[0].label
-}
-
-function initAppConttrols(){
-  appActions = document.getElementById('app-actions')
-  document.getElementById('quit-btn').addEventListener('click', window.close)
 }
 
 function initStartStopControls() {
@@ -137,13 +130,14 @@ function padLeft(string, pad, length) {
 }
 
 class Preferences {
-  // TODO: reduce coupling with outside world (appActions, pomodoroTimer, breakTimer)
+  // TODO: reduce coupling with outside world (pomodoroTimer, breakTimer)
   // TODO: extract to a different file
   constructor() {
     this.paneElem = document.getElementById('preferences')
     this.actions = document.getElementById('preferences-actions')
     this.pomodoroDurationElem = document.getElementById('pomodoro-duration')
     this.breakDurationElem = document.getElementById('break-duration')
+    this.appActions = document.getElementById('app-actions')
     document
       .getElementById('preferences-btn')
       .addEventListener('click', () => this.toggle())
@@ -176,7 +170,7 @@ class Preferences {
     this.breakDuration = breakTimer.duration
     this.paneElem.classList.toggle('hidden')
     this.actions.classList.toggle('hidden')
-    appActions.classList.toggle('hidden')
+    this.appActions.classList.toggle('hidden')
   }
 
   save() {
