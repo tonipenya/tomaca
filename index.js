@@ -88,7 +88,8 @@ function stopTimer() {
 
 function updateLabels() {
   const labelText = humanReadableTime(timeLeft)
-  const trayLabel = (timeLeft == timers[0].duration)? '' : labelText
+  const trayLabel = (timeLeft == timers[0].duration || !prefs.showCountdown)?
+                      '' : labelText
   const percentageLeft = Math.floor(timeLeft / timers[0].duration * 100)
   ipcRenderer.send('timer-updated', trayLabel, Math.floor(percentageLeft))
   document.getElementById('countdown-number').textContent = labelText
@@ -138,6 +139,8 @@ class Preferences {
     this.pomodoroDurationElem = document.getElementById('pomodoro-duration')
     this.breakDurationElem = document.getElementById('break-duration')
     this.appActions = document.getElementById('app-actions')
+    this.showCountdownElem = document.getElementById("show-countdown")
+    this.showCountdown = false
     document
       .getElementById('preferences-btn')
       .addEventListener('click', () => this.toggle())
@@ -168,6 +171,7 @@ class Preferences {
   toggle() {
     this.pomodoroDuration = pomodoroTimer.duration
     this.breakDuration = breakTimer.duration
+    this.showCountdownElem.checked = this.showCountdown
     this.paneElem.classList.toggle('hidden')
     this.actions.classList.toggle('hidden')
     this.appActions.classList.toggle('hidden')
@@ -176,6 +180,7 @@ class Preferences {
   save() {
     pomodoroTimer.duration = this.pomodoroDuration
     breakTimer.duration = this.breakDuration
+    this.showCountdown = this.showCountdownElem.checked
     this.toggle()
     stopTimer()
   }
