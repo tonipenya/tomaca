@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain, Tray, Menu} = require('electron')
+const {app, BrowserWindow, ipcMain, Tray, Menu, shell} = require('electron')
 const path = require('path')
 
 const assetsDirectory = path.join(__dirname, 'assets')
@@ -31,6 +31,9 @@ const createTray = () => {
   tray = new Tray(path.join(assetsDirectory, 'trayIcon.png'))
 
   const contextMenu = Menu.buildFromTemplate([
+      {label: 'Help', type: 'normal', role: 'help', click: function() {
+        shell.openExternal('https://github.com/tonipenya/tomaca');
+      }},
       {label: 'Quit Tomaca', type: 'normal', role: 'quit'}
     ])
 
