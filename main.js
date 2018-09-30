@@ -6,8 +6,12 @@ const assetsDirectory = path.join(__dirname, 'assets')
 let tray = undefined
 let window = undefined
 
-ipcMain.on('timer-updated', (evt, secondsLeft) => {
-  tray.setTitle(String(secondsLeft))
+ipcMain.on('timer-updated', (evt, timeLeft, percentageLeft) => {
+  tray.setTitle(timeLeft)
+  const trayIcon = percentageLeft < 100 ?
+                    `trayIconProgress/progress_${percentageLeft}.png`
+                    : 'trayIcon.png'
+  tray.setImage(path.join(assetsDirectory, trayIcon))
 })
 
 // Don't show the app in the doc
